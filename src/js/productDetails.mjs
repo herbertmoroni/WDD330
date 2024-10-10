@@ -18,13 +18,17 @@ export function addToCart() {
     window.location.href = "/cart/index.html";
 }
 
+function calculateDiscount(suggestedPrice, finalPrice) {
+    return ((suggestedPrice - finalPrice) / suggestedPrice * 100).toFixed(0);
+}
+
 export function renderProductDetails() {
     document.querySelector("#productName").innerText = product.Brand.Name;
     document.querySelector("#productNameWithoutBrand").innerText =
         product.NameWithoutBrand;
     document.querySelector("#productImage").src = product.Image;
     document.querySelector("#productImage").alt = product.Name;
-    document.querySelector("#productFinalPrice").innerText = product.FinalPrice;
+    document.querySelector("#productFinalPrice").innerText = '-' + calculateDiscount(product.SuggestedRetailPrice, product.FinalPrice) + '% ' + product.FinalPrice;
     document.querySelector("#productColorName").innerText =
         product.Colors[0].ColorName;
     document.querySelector("#productDescriptionHtmlSimple").innerHTML =
