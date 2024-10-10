@@ -24,14 +24,27 @@ function calculateDiscount(suggestedPrice, finalPrice) {
 
 export function renderProductDetails() {
     document.querySelector("#productName").innerText = product.Brand.Name;
-    document.querySelector("#productNameWithoutBrand").innerText =
-        product.NameWithoutBrand;
+    document.querySelector("#productNameWithoutBrand").innerText = product.NameWithoutBrand;
     document.querySelector("#productImage").src = product.Image;
     document.querySelector("#productImage").alt = product.Name;
-    document.querySelector("#productFinalPrice").innerText = '-' + calculateDiscount(product.SuggestedRetailPrice, product.FinalPrice) + '% ' + product.FinalPrice;
-    document.querySelector("#productColorName").innerText =
-        product.Colors[0].ColorName;
-    document.querySelector("#productDescriptionHtmlSimple").innerHTML =
-        product.DescriptionHtmlSimple;
+    document.querySelector("#productColorName").innerText = product.Colors[0].ColorName;
+    document.querySelector("#productDescriptionHtmlSimple").innerHTML = product.DescriptionHtmlSimple;
     document.querySelector("#addToCart").dataset.id = product.Id;
+
+    const priceElement = document.querySelector("#productFinalPrice");
+    const discount = calculateDiscount(product.SuggestedRetailPrice, product.FinalPrice);
+
+    const discountSpan = document.createElement('span');
+    discountSpan.className = 'product-card__discount';
+    discountSpan.textContent = `-${discount}%`;
+
+    const priceSpan = document.createElement('span');
+    priceSpan.className = 'product-card__final-price';
+    priceSpan.textContent = product.FinalPrice;
+
+    priceElement.innerHTML = '';
+    if (discount > 0) {
+        priceElement.appendChild(discountSpan);
+    }
+    priceElement.appendChild(priceSpan);
 }

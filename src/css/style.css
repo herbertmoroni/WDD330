@@ -166,6 +166,28 @@ button {
   width: 100%;
 }
 
+.product-card__price {
+  display: flex;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.product-card__discount {
+  background-color: #B12704;
+  color: #ffffff;
+  padding: 2px 4px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 2px;
+  margin-right: 8px;
+}
+
+.product-card__final-price {
+  font-size: 18px;
+  font-weight: bold;
+  color: #0F1111;
+}
+
 /* Start cart list card styles */
 .cart-card {
   display: grid;
