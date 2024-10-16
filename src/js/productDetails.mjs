@@ -1,5 +1,5 @@
 import { findProductById } from "./productData.mjs";
-import { setLocalStorage } from "./utils.mjs";
+import { setLocalStorage, getLocalStorage } from "./utils.mjs";
 
 let product = {};
 
@@ -29,7 +29,7 @@ export function renderProductDetails() {
     document.querySelector("#productImage").alt = product.Name;
     document.querySelector("#productColorName").innerText = product.Colors[0].ColorName;
     document.querySelector("#productDescriptionHtmlSimple").innerHTML = product.DescriptionHtmlSimple;
-    document.querySelector("#addToCart").dataset.id = product.Id;
+    document.querySelector("button#addToCart").dataset.id = product.Id;
 
     const priceElement = document.querySelector("#productFinalPrice");
     const discount = calculateDiscount(product.SuggestedRetailPrice, product.FinalPrice);
