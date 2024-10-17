@@ -1,5 +1,5 @@
 import { findProductById } from "./productData.mjs";
-import { setLocalStorage, getLocalStorage } from "./utils.mjs";
+import { setLocalStorage, getLocalStorage, updateCartCount, animateCart } from "./utils.mjs";
 
 let product = {};
 
@@ -15,7 +15,9 @@ export function addToCart() {
         : [];
     cart.push(product);
     setLocalStorage("so-cart", cart);
-    window.location.href = "/cart/index.html";
+    //window.location.href = "/cart/index.html";
+    updateCartCount();
+    animateCart();
 }
 
 function calculateDiscount(suggestedPrice, finalPrice) {

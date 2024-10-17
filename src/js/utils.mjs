@@ -66,6 +66,16 @@ export function updateCartCount() {
   }
 }
 
+export function animateCart() {
+  const cartIcon = document.querySelector('.cart');
+  if (cartIcon) {
+    cartIcon.classList.add('animating');
+    setTimeout(() => {
+      cartIcon.classList.remove('animating');
+    }, 500); // nimation duration
+  }
+}
+
 export async function loadHeaderFooter() {
   const headerTemplateFn = loadTemplate("../partials/header.html");
   const footerTemplateFn = loadTemplate("../partials/footer.html");
