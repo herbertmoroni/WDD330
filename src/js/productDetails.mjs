@@ -1,5 +1,5 @@
 import { findProductById } from "./productData.mjs";
-import { setLocalStorage, getLocalStorage, updateCartCount, animateCart } from "./utils.mjs";
+import { setLocalStorage, getLocalStorage, updateCartCount, animateCart, renderProductPrice } from "./utils.mjs";
 
 let product = {};
 
@@ -20,10 +20,6 @@ export function addToCart() {
     animateCart();
 }
 
-function calculateDiscount(suggestedPrice, finalPrice) {
-    return ((suggestedPrice - finalPrice) / suggestedPrice * 100).toFixed(0);
-}
-
 export function renderProductDetails() {
     document.querySelector("#productName").innerText = product.Brand.Name;
     document.querySelector("#productNameWithoutBrand").innerText = product.NameWithoutBrand;
@@ -33,20 +29,5 @@ export function renderProductDetails() {
     document.querySelector("#productDescriptionHtmlSimple").innerHTML = product.DescriptionHtmlSimple;
     document.querySelector("button#addToCart").dataset.id = product.Id;
 
-    const priceElement = document.querySelector("#productFinalPrice");
-    const discount = calculateDiscount(product.SuggestedRetailPrice, product.FinalPrice);
-
-    const discountSpan = document.createElement('span');
-    discountSpan.className = 'product-card__discount';
-    discountSpan.textContent = `-${discount}%`;
-
-    const priceSpan = document.createElement('span');
-    priceSpan.className = 'product-card__final-price';
-    priceSpan.textContent = product.FinalPrice;
-
-    priceElement.innerHTML = '';
-    if (discount > 0) {
-        priceElement.appendChild(discountSpan);
-    }
-    priceElement.appendChild(priceSpan);
+    renderProductPrice(product);
 }
