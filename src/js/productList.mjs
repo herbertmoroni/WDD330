@@ -1,4 +1,6 @@
 import { getData } from "./productData.mjs";
+import { renderPriceAndDiscount } from "./utils.mjs";
+
 export default async function productList() {
     const productList = document.querySelector(".product-list");
     const products = await getData();
@@ -13,23 +15,22 @@ export default async function productList() {
 function productCard(product) {
     const template = document.getElementById("product-card-template");
     const clone = template.content.cloneNode(true);
-   
+
     const urlRef = clone.querySelector(".card__url");
     urlRef.href = `product_pages/index.html?product=${product.Id}`;
 
     const image = clone.querySelector(".card__image");
     image.src = product.Image;
-    image.alt = product.Name; 
+    image.alt = product.Name;
 
     const name = clone.querySelector(".card__name");
-    name.textContent = product.NameWithoutBrand; 
-   
+    name.textContent = product.NameWithoutBrand;
+
     const brand = clone.querySelector(".card__brand");
     brand.textContent = product.Brand.Name;
 
-    const price = clone.querySelector(".card__price");
-    price.textContent = `$${product.FinalPrice}`;
-   
-   
+    const priceElement = clone.querySelector(".card__price");
+    renderPriceAndDiscount(priceElement, product.SuggestedRetailPrice, product.FinalPrice);
+
     return clone;
 }
