@@ -8,13 +8,10 @@ export default async function productList(category) {
     console.log(products);
 
     products.forEach(element => {
-        if (element.Image != undefined)
-        {
         //if (element.Id == "880RR" || element.Id == "985RF" || element.Id == "985PR" || element.Id == "344YJ") {
             const p = productCard(element);
             productList.append(p);
         //}
-        }
     });
 }
 
@@ -26,7 +23,7 @@ function productCard(product) {
     urlRef.href = `product_pages/index.html?product=${product.Id}`;
 
     const image = clone.querySelector(".card__image");
-    image.src = product.Image;
+    image.src = product.Images.PrimaryLarge;
     image.alt = product.Name;
 
     const name = clone.querySelector(".card__name");
