@@ -6,11 +6,12 @@ export default async function productList(category) {
     const products = await getData(category);
     console.log(category);
     console.log(products);
+
     products.forEach(element => {
-        if (element.Id == "880RR" || element.Id == "985RF" || element.Id == "985PR" || element.Id == "344YJ") {
+        //if (element.Id == "880RR" || element.Id == "985RF" || element.Id == "985PR" || element.Id == "344YJ") {
             const p = productCard(element);
             productList.append(p);
-        }
+        //}
     });
 }
 
