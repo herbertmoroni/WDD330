@@ -20,7 +20,7 @@ function productCard(product) {
     const clone = template.content.cloneNode(true);
 
     const urlRef = clone.querySelector(".card__url");
-    urlRef.href = `product_pages/index.html?product=${product.Id}`;
+    urlRef.href = `/product_pages/index.html?product=${product.Id}`;
 
     const image = clone.querySelector(".card__image");
     image.src = product.Images.PrimaryLarge;
