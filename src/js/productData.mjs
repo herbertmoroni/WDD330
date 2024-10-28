@@ -15,7 +15,12 @@ export async function getData(category) {
 }
 
 export async function findProductById(id) {
-  const response = await fetch(baseURL + `/product/${id}`);
-  const products = await convertToJson(response);
-  return products.Result;
+  try {
+    const response = await fetch(baseURL + `/product/${id}`);
+    const products = await convertToJson(response);
+    return products.Result;
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    return null;
+  }
 }

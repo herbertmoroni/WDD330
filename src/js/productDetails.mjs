@@ -4,9 +4,37 @@ import { setLocalStorage, getLocalStorage, updateCartCount, animateCart, renderP
 let product = {};
 
 export async function productDetails(productID) {
-    product = await findProductById(productID);
-    renderProductDetails();
-    document.getElementById("addToCart").addEventListener("click", addToCart);
+    try {
+        product = await findProductById(productID);
+
+        if (!product) {
+            throw new Error('Product not found');
+        }
+
+        renderProductDetails();
+
+        document.getElementById("addToCart").addEventListener("click", addToCart);
+
+    } catch (error) {
+        console.error('Error loading product:', error);
+        renderErrorMessage();
+    }
+}
+
+function renderErrorMessage() {
+    const productDetail = document.querySelector('.product-detail');
+    productDetail.innerHTML = `
+        <div class="error-message" style="text-align: center; padding: 2em;">
+            <h2 style="color: #B12704;">Product Not Found</h2>
+            <p>We're sorry, but the product you're looking for could not be found.</p>
+            <a href="/index.html" 
+               style="display: inline-block; margin-top: 1em; padding: 0.5em 1em; 
+                      background-color: var(--secondary-color); color: white; 
+                      text-decoration: none; border-radius: 4px;">
+                Continue Shopping
+            </a>
+        </div>
+    `;
 }
 
 export function addToCart() {
@@ -15,7 +43,6 @@ export function addToCart() {
         : [];
     cart.push(product);
     setLocalStorage("so-cart", cart);
-    //window.location.href = "/cart/index.html";
     updateCartCount();
     animateCart();
 }
