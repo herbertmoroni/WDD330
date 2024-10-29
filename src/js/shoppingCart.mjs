@@ -1,4 +1,4 @@
-import { getLocalStorage } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, updateCartCount } from "./utils.mjs";
 
 export function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
@@ -31,23 +31,12 @@ export function renderCartContents() {
 
 }
 
-function addRemoveButtonListeners() {
-  const removeButtons = document.querySelectorAll(".cart-card__remove");
-  removeButtons.forEach(button => {
-    button.addEventListener("click", function(event) {
-      const itemId = event.target.getAttribute("data-id");
-      removeFromCart(itemId);
-      renderCartContents();
-    });
-  });
-}
-
 function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider">
     <button class="cart-card__remove" data-id="${item.id}">❌</button>
     <a href="#" class="cart-card__image">
       <img
-        src="${item.Image}"
+        src="${item.Images.PrimaryLarge}"
         alt="${item.Name}"
       />
     </a>
@@ -62,10 +51,26 @@ function cartItemTemplate(item) {
   return newItem;
 }
 
+function addRemoveButtonListeners() {
+  const removeButtons = document.querySelectorAll(".cart-card__remove");
+  removeButtons.forEach(button => {
+    button.addEventListener("click", function(event) {
+      const itemId = event.target.getAttribute("data-id");
+      removeFromCart(itemId);
+      renderCartContents();
+    });
+  });
+}
+
+
 function removeFromCart(itemId) {
   let cartItems = getLocalStorage("so-cart");
   if (cartItems) {
-    cartItems = cartItems.filter(item => item.id !== itemId);
-    localStorage.setItem("so-cart", JSON.stringify(cartItems));
+    // Filter out the item with the matching ID
+    cartItems = cartItems.filter(item => item.Id !== itemId);
+    // Save the updated cart back to localStorage
+    setLocalStorage("so-cart", cartItems);
+    // Update the cart count in the header
+    updateCartCount();
   }
 }
