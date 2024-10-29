@@ -2,8 +2,6 @@ import { getLocalStorage, setLocalStorage, updateCartCount } from "./utils.mjs";
 
 export function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
-  //const htmlItems = cartItems ? cartItems.map((item) => cartItemTemplate(item)) : [];
-  //document.querySelector(".product-list").innerHTML = htmlItems.join("");
   const productList = document.querySelector(".product-list");
 
    // Handle empty cart
@@ -19,12 +17,16 @@ export function renderCartContents() {
                 Continue Shopping
             </a>
       </li>`;
+    updateCartTotal(cartItems);
     return;
   }
 
   // Handle items in cart
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   productList.innerHTML = htmlItems.join("");
+
+  // Update cart total
+  updateCartTotal(cartItems);
 
   // Add event listeners for remove buttons
   addRemoveButtonListeners();
@@ -66,17 +68,28 @@ function addRemoveButtonListeners() {
 function removeFromCart(itemId) {
   let cartItems = getLocalStorage("so-cart");
   if (cartItems) {
-
-    console.log("Cart items before removal:", cartItems);
-
-    // Filter out the item with the matching ID
     cartItems = cartItems.filter(item => item.Id !== itemId);
-    // Save the updated cart back to localStorage
-
-    console.log("Cart items after removal:", cartItems);
-    
     setLocalStorage("so-cart", cartItems);
-    // Update the cart count in the header
     updateCartCount();
+    updateCartTotal(cartItems); 
   }
+}
+
+function calculateCartTotal(cartItems) {
+  if (!cartItems) return 0;
+  return cartItems.reduce((total, item) => total + item.FinalPrice, 0).toFixed(2);
+}
+
+function updateCartTotal(cartItems) {
+  const cartFooter = document.querySelector(".cart-footer");
+  const cartTotalElement = document.querySelector(".cart-total");
+  
+  if (!cartItems || cartItems.length === 0) {
+    cartFooter.classList.remove("show");
+    return;
+  }
+  
+  const total = calculateCartTotal(cartItems);
+  cartTotalElement.textContent = `Total: $${total}`;
+  cartFooter.classList.add("show");
 }
