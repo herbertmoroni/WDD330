@@ -33,7 +33,7 @@ export function renderCartContents() {
 
 function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider">
-    <button class="cart-card__remove" data-id="${item.id}">❌</button>
+    <button class="cart-card__remove" data-id="${item.Id}">❌</button>
     <a href="#" class="cart-card__image">
       <img
         src="${item.Image}"
@@ -66,9 +66,15 @@ function addRemoveButtonListeners() {
 function removeFromCart(itemId) {
   let cartItems = getLocalStorage("so-cart");
   if (cartItems) {
+
+    console.log("Cart items before removal:", cartItems);
+
     // Filter out the item with the matching ID
     cartItems = cartItems.filter(item => item.Id !== itemId);
     // Save the updated cart back to localStorage
+
+    console.log("Cart items after removal:", cartItems);
+    
     setLocalStorage("so-cart", cartItems);
     // Update the cart count in the header
     updateCartCount();
