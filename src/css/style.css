@@ -320,6 +320,50 @@ button {
   text-decoration: underline;
 }
 
+.newsletter-form {
+  background-color: #f0f4f8;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin: 20px;
+  text-align: center;
+}
+
+.newsletter-form h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.newsletter-form p {
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.newsletter-form label {
+  margin-right: 10px;
+}
+
+.newsletter-form input[type="email"] {
+  padding: 10px;
+  width: 60%;
+  margin-right: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.newsletter-form button {
+  padding: 10px 20px;
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.newsletter-form button:hover {
+  background-color: #004494;
+}
+
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;
