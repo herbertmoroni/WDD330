@@ -1,16 +1,16 @@
-import { getData } from "./productData.mjs";
+import { getProductsByCategory } from "./externalServices.mjs";
 import { renderPriceAndDiscount } from "./utils.mjs";
 
 export default async function productList(category) {
     const productList = document.querySelector(".product-list");
-    const products = await getData(category);
+    const products = await getProductsByCategory(category);
     console.log(category);
     console.log(products);
 
     products.forEach(element => {
         //if (element.Id == "880RR" || element.Id == "985RF" || element.Id == "985PR" || element.Id == "344YJ") {
-            const p = productCard(element);
-            productList.append(p);
+        const p = productCard(element);
+        productList.append(p);
         //}
     });
 }

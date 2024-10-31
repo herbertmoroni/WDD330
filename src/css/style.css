@@ -95,7 +95,7 @@ header {
 }
 
 button {
-  padding: 0.5em 2em;
+  padding: 10px 20px;
   background-color: var(--secondary-color);
   color: white;
   margin: auto;
@@ -320,6 +320,8 @@ button {
   text-decoration: underline;
 }
 
+/* newsletter */
+
 .newsletter-form {
   background-color: #f0f4f8;
   padding: 20px;
@@ -362,6 +364,97 @@ button {
 
 .newsletter-form button:hover {
   background-color: #004494;
+}
+
+/* checkout button */
+
+.checkout-button {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.checkout-button:hover {
+  background-color: var(--primary-color);
+  color: black;
+}
+
+/* checkout form */
+
+.checkout-form {
+  max-width: 50%;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  font-family: Arial, sans-serif;
+  margin-bottom: 20px;
+}
+
+.checkout-form h2 {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.checkout-form fieldset {
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+}
+
+.checkout-form legend {
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 0 5px;
+}
+
+.checkout-form label {
+  display: block;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.checkout-form input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9em;
+  box-sizing: border-box;
+}
+
+.checkout-form p {
+  font-size: 0.9em;
+}
+
+.checkout-form .final-checkout-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  background-color: var(--secondary-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.checkout-form .final-checkout-button:hover {
+  background-color: var(--primary-color);
+  color: black;
+}
+
+.checkout-form fieldset:last-of-type {
+  background-color: #f9f9f9;
+  padding: 15px;
 }
 
 @media screen and (min-width: 500px) {
