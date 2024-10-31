@@ -8,14 +8,14 @@ function convertToJson(res) {
 }
 
 export async function getProductsByCategory(category) {
-  const response = await fetch(`${baseURL}products/search/${category}`);
+  const response = await fetch(`${baseURL}/products/search/${category}`);
   const data = await convertToJson(response);
   return data.Result;
 }
 
 export async function findProductById(id) {
   try {
-    const response = await fetch(baseURL + `product/${id}`);
+    const response = await fetch(baseURL + `/product/${id}`);
     const products = await convertToJson(response);
     return products.Result;
   } catch (error) {
