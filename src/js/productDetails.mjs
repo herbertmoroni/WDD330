@@ -41,7 +41,20 @@ export function addToCart() {
     const cart = Array.isArray(getLocalStorage("so-cart"))
         ? getLocalStorage("so-cart")
         : [];
-    cart.push(product);
+
+    // Check if product already exists in cart
+    const existingItemIndex = cart.findIndex(item => item.Id === product.Id);
+
+    if (existingItemIndex >= 0) {
+        // If item exists, increment its quantity
+        cart[existingItemIndex].Quantity = (cart[existingItemIndex].Quantity || 1) + 1;
+    } else {
+        // If item is new, add it with quantity of 1
+        product.Quantity = 1;
+        cart.push(product);
+    }
+
+    //cart.push(product);
     setLocalStorage("so-cart", cart);
     updateCartCount();
     animateCart();

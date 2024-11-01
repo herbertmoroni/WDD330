@@ -61,8 +61,11 @@ export function updateCartCount() {
   const cartItems = getLocalStorage("so-cart") || [];
   const cartCount = document.getElementById("cart-count");
   if (cartCount) {
-    cartCount.textContent = cartItems.length.toString();
-    cartCount.style.display = cartItems.length > 0 ? "inline" : "none";
+    //cartCount.textContent = cartItems.length.toString();
+    //cartCount.style.display = cartItems.length > 0 ? "inline" : "none";
+    const totalQuantity = cartItems.reduce((sum, item) => sum + (item.Quantity || 1), 0);
+    cartCount.textContent = totalQuantity.toString();
+    cartCount.style.display = totalQuantity > 0 ? "inline" : "none";
   }
 }
 
