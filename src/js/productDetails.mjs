@@ -63,11 +63,32 @@ export function addToCart() {
 export function renderProductDetails() {
     document.querySelector("#productName").innerText = product.Brand.Name;
     document.querySelector("#productNameWithoutBrand").innerText = product.NameWithoutBrand;
-    document.querySelector("#productImage").src = product.Images.PrimaryLarge;
+
+    // Set up responsive image with srcset
+    const imgElement = document.querySelector("#productImage");
+    imgElement.srcset = `
+        ${product.Images.PrimarySmall} 80w,
+        ${product.Images.PrimaryMedium} 160w,
+        ${product.Images.PrimaryLarge} 320w,
+        ${product.Images.PrimaryExtraLarge} 600w
+    `;
+    imgElement.src = product.Images.PrimaryLarge; // Fallback for browsers that don't support srcset
+
     document.querySelector("#productImage").alt = product.Name;
     document.querySelector("#productColorName").innerText = product.Colors[0].ColorName;
     document.querySelector("#productDescriptionHtmlSimple").innerHTML = product.DescriptionHtmlSimple;
     document.querySelector("button#addToCart").dataset.id = product.Id;
+
+     // Add debug info
+    //  imgElement.addEventListener('load', function() {
+    //      console.log('Loaded image:', {
+    //          currentSrc: this.currentSrc,  // Shows which image from srcset was chosen
+    //          naturalWidth: this.naturalWidth,
+    //          naturalHeight: this.naturalHeight,
+    //          offsetWidth: this.offsetWidth,
+    //          offsetHeight: this.offsetHeight
+    //      });
+    //  });
 
     renderProductPrice(product);
 }
