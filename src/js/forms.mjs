@@ -146,8 +146,10 @@ export function createCheckoutForm() {
         try {
             await checkoutProcess.checkout(form);
             alert("Thank you for your order!");
+            setLocalStorage("so-cart", []);
             form.reset();
         } catch (error) {
+            alert(error);
             console.error(error);
         }
     });

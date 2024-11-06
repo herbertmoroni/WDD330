@@ -85,8 +85,38 @@ const checkoutProcess = {
         try {
             const res = await checkout(json);
             console.log(res);
+
+            // Clear the cart and show success message
+            //localStorage.removeItem(this.key);
+            //this.list = [];
+            //alert("Order placed successfully! Thank you for your purchase.");
+            //location.href = "/";  // Redirect to home page after successful checkout
+
         } catch (err) {
-            console.log(err);
+            // Handle different types of errors
+            let errorMessage = "An error occurred during checkout. ";
+            
+            if (err.message === "Bad Response") {
+                // Handle API-specific error
+                errorMessage += "Please check your payment information and try again.";
+            } else if (err.name === "TypeError") {
+                // Handle network errors
+                errorMessage += "Please check your internet connection and try again.";
+            } else {
+                // Handle any other unexpected errors
+                errorMessage += "Please try again later or contact customer support.";
+            }
+            
+            // Display error to user
+            alert(errorMessage);
+
+            console.error("Checkout Error:", err);
+            
+            // Re-enable submit button if it was disabled
+            const submitButton = form.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = false;
+            }
         }
     },
 };
