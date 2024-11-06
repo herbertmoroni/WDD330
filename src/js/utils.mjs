@@ -119,3 +119,41 @@ export function renderProductPrice(product) {
   const priceElement = document.querySelector("#productFinalPrice");
   renderPriceAndDiscount(priceElement, product.SuggestedRetailPrice, product.FinalPrice);
 }
+
+// modal
+// *** TESTING MODAL: go to dev tools, application tab, and delete "hasVisitedBefore" ***
+
+export function createRegistrationModal() {
+  const modal = document.getElementById("registration-modal");
+  const closeButton = document.querySelector(".close-button");
+  const hasVisitedBefore = localStorage.getItem("hasVisitedBefore");
+
+  if (!hasVisitedBefore) {
+    setTimeout(() => {
+      modal.style.display = "block";
+    }, 2000);
+
+    localStorage.setItem("hasVisitedBefore", "true");
+  }
+
+  closeButton.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal.style.display === "block") {
+      modal.style.display = "none";
+    }
+  });
+
+  return {
+    open: () => { modal.style.display = "block"; },
+    close: () => { modal.style.display = "none"; }
+  };
+}
