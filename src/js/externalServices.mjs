@@ -1,12 +1,13 @@
-const baseURL = import.meta.env.VITE_SERVER_URL;
+//const baseURL = import.meta.env.VITE_SERVER_URL;
 
-//const baseURL = 'http://server-nodejs.cit.byui.edu:3000';
+const baseURL = 'http://server-nodejs.cit.byui.edu:3000';
 
-function convertToJson(res) {
+async function convertToJson(res) {
+  const jsonResponse = await res.json();
   if (res.ok) {
-    return res.json();
+    return jsonResponse;
   } else {
-    throw new Error("Bad Response");
+    throw { name: 'servicesError', message: jsonResponse };
   }
 }
 
