@@ -1,4 +1,5 @@
 import { findProductById } from "./externalServices.mjs";
+import { renderComments, addComment} from "./productComments.mjs";
 import { setLocalStorage, getLocalStorage, updateCartCount, animateCart, renderProductPrice } from "./utils.mjs";
 
 let product = {};
@@ -12,8 +13,10 @@ export async function productDetails(productID) {
         }
 
         renderProductDetails();
+        renderComments(productID);
 
         document.getElementById("addToCart").addEventListener("click", addToCart);
+        document.getElementById("commentForm").addEventListener("submit", (event) => addComment(event, productID));
 
     } catch (error) {
         console.error('Error loading product:', error);
@@ -91,4 +94,5 @@ export function renderProductDetails() {
     //  });
 
     renderProductPrice(product);
+    // renderComments();
 }

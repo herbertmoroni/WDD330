@@ -219,6 +219,12 @@ button {
   margin: auto;
 }
 
+.comment-section{
+    padding: 1em;
+    max-width: 500px;
+    margin: auto;
+}
+
 .product-detail img {
   width: 100%;
 }
