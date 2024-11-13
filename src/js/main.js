@@ -1,6 +1,6 @@
 import productList from "./productList.mjs";
 import fetchAlerts from "./alert.mjs";
-import { loadHeaderFooter, createRegistrationModal } from "./utils.mjs";
+import { loadHeaderFooter, searchBar, createRegistrationModal } from "./utils.mjs";
 import { createNewsletterForm } from "./forms.mjs";
 
 
@@ -8,6 +8,8 @@ import { createNewsletterForm } from "./forms.mjs";
 document.addEventListener('DOMContentLoaded', () => {
 
     loadHeaderFooter();
+
+    searchBar();
 
     createRegistrationModal();
 
