@@ -1,6 +1,6 @@
-const baseURL = import.meta.env.VITE_SERVER_URL;
+// const baseURL = import.meta.env.VITE_SERVER_URL;
 
-//const baseURL = 'http://server-nodejs.cit.byui.edu:3000';
+const baseURL = 'http://server-nodejs.cit.byui.edu:3000';
 
 async function convertToJson(res) {
   const jsonResponse = await res.json();
@@ -37,4 +37,27 @@ export async function checkout(payload) {
     body: JSON.stringify(payload),
   };
   return await fetch(baseURL + "/checkout/", options).then(convertToJson);
+}
+
+export default async function loginRequest(user) {
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  };
+  const response = await fetch(baseURL + "/login/", options).then(convertToJson);
+  return response.accessToken;
+}
+
+export async function getOrders(token) {
+  const options = {
+    method: "GET",
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  };
+  const response = await fetch(baseURL + "/orders/", options).then(convertToJson);
+  return response;
 }
