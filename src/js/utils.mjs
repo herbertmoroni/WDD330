@@ -186,4 +186,4 @@ export function searchBar(containerId) {
   container.appendChild(form);
 }
 
-searchBar("search-container");
+// searchBar("search-container");
