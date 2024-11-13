@@ -157,3 +157,33 @@ export function createRegistrationModal() {
     close: () => { modal.style.display = "none"; }
   };
 }
+
+export function searchBar(containerId) {
+  const container = document.getElementById(containerId);
+
+  const form = document.createElement("form");
+  form.action = "/search";
+  form.method = "get";
+  form.className = "search-bar";
+
+  form.id = "searchForm";
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.name = "query";
+  input.placeholder = "Search Products...";
+  input.setAttribute("aria-label", "Search");
+
+  input.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      form.submit();
+    }
+  });
+
+  form.appendChild(input);
+
+  container.appendChild(form);
+}
+
+searchBar("search-container");
