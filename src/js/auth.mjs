@@ -4,7 +4,7 @@ import jwt_decode from "jwt-decode";
 
 const tokenKey = "so-token";
 
-export default async function login(creds, redirect="/"){
+export async function login(creds, redirect="/"){
     try {
         const token = await loginRequest(creds);
         setLocalStorage(tokenKey, token);

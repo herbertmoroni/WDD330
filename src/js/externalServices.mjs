@@ -39,7 +39,7 @@ export async function checkout(payload) {
   return await fetch(baseURL + "/checkout/", options).then(convertToJson);
 }
 
-export default async function loginRequest(user) {
+export async function loginRequest(user) {
   const options = {
     method: "POST",
     headers: {

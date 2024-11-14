@@ -7,6 +7,12 @@ export default defineConfig({
   build: {
     outDir: "../dist",
     rollupOptions: {
+      external: ['jwt-decode'],
+      output: {
+        globals: {
+          'jwt-decode': 'jwtDecode'
+        }
+      },
       input: {
         main: resolve(__dirname, "src/index.html"),
         cart: resolve(__dirname, "src/cart/index.html"),
@@ -18,4 +24,10 @@ export default defineConfig({
       },
     },
   },
+  resolve: {
+    alias: {
+      'jwt-decode': 'jwt-decode'
+    }
+  }
+
 });
