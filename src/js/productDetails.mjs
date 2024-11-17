@@ -1,4 +1,4 @@
-import { findProductById } from "./externalServices.mjs";
+import { findProductById, getProductsByCategory  } from "./externalServices.mjs";
 import { setLocalStorage, getLocalStorage, updateCartCount, animateCart, renderProductPrice } from "./utils.mjs";
 
 let product = {};
@@ -15,11 +15,59 @@ export async function productDetails(productID) {
 
         document.getElementById("addToCart").addEventListener("click", addToCart);
 
+        await addRecommendations(product.Category);
+
     } catch (error) {
         console.error('Error loading product:', error);
         renderErrorMessage();
     }
 }
+
+async function addRecommendations(category) {
+    try {
+        // Get all products in the same category
+        const products = await getProductsByCategory(category);
+        
+        // Filter out the current product and get 2-3 random products
+        const otherProducts = products.filter(p => p.Id !== product.Id);
+        const numRecommendations = Math.floor(Math.random() * 2) + 2; // Random number between 2 and 3
+        const recommendations = getRandomProducts(otherProducts, numRecommendations);
+        
+        // Render the recommendations
+        renderRecommendations(recommendations);
+    } catch (error) {
+        console.error('Error loading recommendations:', error);
+    }
+}
+
+function getRandomProducts(products, count) {
+    const shuffled = [...products].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+}
+
+function renderRecommendations(recommendations) {
+    const recommendationsGrid = document.querySelector('.recommendations-grid');
+    if (!recommendationsGrid) return;
+
+    recommendationsGrid.innerHTML = recommendations.map(product => `
+        <div class="recommendation-card">
+            <a href="/product_pages/index.html?product=${product.Id}">
+                <img 
+                    src="${product.Images.PrimaryMedium}" 
+                    alt="${product.Name}"
+                    loading="lazy"
+                />
+                <div class="recommendation-card__content">
+                    <h3 class="card__brand">${product.Brand.Name}</h3>
+                    <h4 class="card__name">${product.NameWithoutBrand}</h4>
+                    <p class="card__price" data-id="${product.Id}"></p>
+                </div>
+            </a>
+        </div>
+    `).join('');
+
+}
+
 
 function renderErrorMessage() {
     const productDetail = document.querySelector('.product-detail');
@@ -72,23 +120,13 @@ export function renderProductDetails() {
         ${product.Images.PrimaryLarge} 320w,
         ${product.Images.PrimaryExtraLarge} 600w
     `;
+    
     imgElement.src = product.Images.PrimaryLarge; // Fallback for browsers that don't support srcset
-
     document.querySelector("#productImage").alt = product.Name;
+
     document.querySelector("#productColorName").innerText = product.Colors[0].ColorName;
     document.querySelector("#productDescriptionHtmlSimple").innerHTML = product.DescriptionHtmlSimple;
     document.querySelector("button#addToCart").dataset.id = product.Id;
-
-     // Add debug info
-    //  imgElement.addEventListener('load', function() {
-    //      console.log('Loaded image:', {
-    //          currentSrc: this.currentSrc,  // Shows which image from srcset was chosen
-    //          naturalWidth: this.naturalWidth,
-    //          naturalHeight: this.naturalHeight,
-    //          offsetWidth: this.offsetWidth,
-    //          offsetHeight: this.offsetHeight
-    //      });
-    //  });
 
     renderProductPrice(product);
 }

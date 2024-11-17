@@ -631,3 +631,86 @@ footer {
       grid-template-columns: 1fr;
   }
 }
+
+.recommendations {
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+.recommendations h2 {
+  text-align: center;
+  color: var(--dark-grey);
+  margin-bottom: 1.5rem;
+}
+
+.recommendations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+.recommendation-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  max-width: 300px;
+}
+
+.recommendation-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.recommendation-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.recommendation-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.recommendation-card__content {
+  padding: 0.5rem;
+}
+
+.recommendation-card .card__brand {
+  font-size: 0.9rem;
+  color: var(--dark-grey);
+  margin: 0;
+}
+
+.recommendation-card .card__name {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  color: var(--dark-grey);
+}
+
+.recommendation-card .card__price {
+  font-weight: bold;
+  color: var(--primary-color);
+  margin: 0.5rem 0 0 0;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .recommendations {
+      padding: 0.5rem;
+  }
+  
+  .recommendations-grid {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+  }
+  
+  .recommendation-card {
+      padding: 0.5rem;
+  }
+}
