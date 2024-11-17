@@ -36,12 +36,33 @@
                             <h2 class="card__name"></h2>
                             <p class="card__price"></p>
                         </a>
+                        <button class="quick-view-button" data-id="">Quick View</button>
                     </li>
                 </template>
             </ul>
         </section>
     </main>
     <footer id="main-footer"></footer>
+    <div id="quickViewModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="product-detail">
+                <!-- Match the structure from your product detail page -->
+                <h2 id="productName"></h2>
+                <h3 id="productNameWithoutBrand"></h3>
+                <img 
+                    id="productImage"
+                    alt=""
+                    srcset=""
+                    sizes="(max-width: 500px) 80px, (max-width: 800px) 160px, 320px"
+                />
+                <p id="productColorName"></p>
+                <p class="product-card__price" id="productFinalPrice"></p>
+                <div id="productDescriptionHtmlSimple"></div>
+                <button id="addToCart" data-id="">Add to Cart</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
