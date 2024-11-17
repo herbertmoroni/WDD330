@@ -1,4 +1,4 @@
-const baseURL = import.meta.env.VITE_SERVER_URL;
+const baseURL = import.meta.env.VITE_SERVER_URL || 'http://server-nodejs.cit.byui.edu:3000';
 
 //const baseURL = 'http://server-nodejs.cit.byui.edu:3000';
 
