@@ -1,5 +1,6 @@
 import { getProductsByCategory } from "./externalServices.mjs";
 import { renderPriceAndDiscount } from "./utils.mjs";
+import { productDetails } from "./productDetails.mjs";
 
 export default async function productList(category) {
     const productList = document.querySelector(".product-list");
@@ -11,6 +12,8 @@ export default async function productList(category) {
         productList.append(p);
         //}
     });
+
+    setupModal();
 }
 
 function productCard(product) {
@@ -44,5 +47,41 @@ function productCard(product) {
     const priceElement = clone.querySelector(".card__price");
     renderPriceAndDiscount(priceElement, product.SuggestedRetailPrice, product.FinalPrice);
 
+    // Set up quick view button
+    const quickViewButton = clone.querySelector(".quick-view-button");
+    quickViewButton.dataset.id = product.Id;
+
     return clone;
+}
+
+function setupModal() {
+    const modal = document.getElementById('quickViewModal');
+    const closeButton = modal.querySelector('.close-button');
+
+    // Handle quick view button clicks
+    document.addEventListener('click', async function(e) {
+        if (e.target.classList.contains('quick-view-button')) {
+            const productId = e.target.dataset.id;
+            await showProductModal(productId);
+        }
+    });
+
+    // Close modal when clicking close button or outside the modal
+    closeButton.addEventListener('click', () => {
+        modal.classList.remove('show');
+    });
+    
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('show');
+        }
+    });
+}
+
+async function showProductModal(productId) {
+    const modal = document.getElementById('quickViewModal');
+    modal.classList.add('show');
+    
+    // Use the existing productDetails function
+    await productDetails(productId);
 }
