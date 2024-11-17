@@ -3,6 +3,8 @@ import { setLocalStorage, getLocalStorage, updateCartCount, animateCart, renderP
 
 let product = {};
 let selectedColor = null;
+let currentImageIndex = 0;
+let productImages = [];
 
 export async function productDetails(productID) {
     try {
@@ -12,8 +14,10 @@ export async function productDetails(productID) {
             throw new Error('Product not found');
         }
 
+        setupProductImages();
         renderProductDetails();
         setupColorSelection();
+        setupImageCarousel();
 
         document.getElementById("addToCart").addEventListener("click", addToCart);
 
@@ -23,6 +27,97 @@ export async function productDetails(productID) {
         console.error('Error loading product:', error);
         renderErrorMessage();
     }
+}
+
+function setupProductImages() {
+    // Start with the primary images
+    productImages = [
+        {
+            small: product.Images.PrimarySmall,
+            medium: product.Images.PrimaryMedium,
+            large: product.Images.PrimaryLarge,
+            extraLarge: product.Images.PrimaryExtraLarge,
+            title: product.Name
+        }
+    ];
+
+    // Add extra images if they exist
+    if (product.Images.ExtraImages) {
+        product.Images.ExtraImages.forEach(image => {
+            const baseUrl = image.Src.replace('600.', '');
+            productImages.push({
+                small: `${baseUrl}80.jpg`,
+                medium: `${baseUrl}160.jpg`,
+                large: `${baseUrl}320.jpg`,
+                extraLarge: image.Src,
+                title: image.Title || product.Name
+            });
+        });
+    }
+}
+
+function setupImageCarousel() {
+    if (productImages.length <= 1) return;
+
+    // Create carousel structure if it doesn't exist
+    let carousel = document.querySelector('.carousel-main');
+    if (!carousel) {
+        const carouselContainer = document.createElement('div');
+        carouselContainer.className = 'carousel';
+        
+        carouselContainer.innerHTML = `
+            <div class="carousel-main">
+                <button class="carousel-button prev" aria-label="Previous image">❮</button>
+                ${document.querySelector('#productImage').outerHTML}
+                <button class="carousel-button next" aria-label="Next image">❯</button>
+            </div>
+        `;
+
+        // Replace existing image with carousel
+        const oldImage = document.querySelector('#productImage');
+        oldImage.parentNode.replaceChild(carouselContainer, oldImage);
+        
+        carousel = carouselContainer.querySelector('.carousel-main');
+    }
+
+    const thumbnails = document.querySelector('.carousel-thumbnails');
+    
+    // Add click handlers for navigation buttons
+    const prevButton = carousel.querySelector('.prev');
+    const nextButton = carousel.querySelector('.next');
+
+    prevButton.addEventListener('click', () => {
+        currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+        updateCarouselImage();
+    });
+
+    nextButton.addEventListener('click', () => {
+        currentImageIndex = (currentImageIndex + 1) % productImages.length;
+        updateCarouselImage();
+    });
+
+    // Add keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            prevButton.click();
+        } else if (e.key === 'ArrowRight') {
+            nextButton.click();
+        }
+    });
+}
+
+function updateCarouselImage() {
+    const imgElement = document.querySelector("#productImage");
+    const currentImage = productImages[currentImageIndex];
+
+    imgElement.srcset = `
+        ${currentImage.small} 80w,
+        ${currentImage.medium} 160w,
+        ${currentImage.large} 320w,
+        ${currentImage.extraLarge} 600w
+    `;
+    imgElement.src = currentImage.large;
+    imgElement.alt = currentImage.title;
 }
 
 function setupColorSelection() {
@@ -78,17 +173,20 @@ function updateSelectedColorDisplay(color) {
 }
 
 function updateProductImage(color) {
-    const imgElement = document.querySelector("#productImage");
-    // Check if ColorPreviewImageSrc exists and contains different sizes
     const baseImageUrl = color.ColorPreviewImageSrc.replace('160.jpg', '');
     
-    imgElement.srcset = `
-        ${baseImageUrl}80.jpg 80w,
-        ${baseImageUrl}160.jpg 160w,
-        ${baseImageUrl}320.jpg 320w,
-        ${baseImageUrl}600.jpg 600w
-    `;
-    imgElement.src = baseImageUrl + '320.jpg';
+    // Update productImages array with new color images
+    productImages = [{
+        small: `${baseImageUrl}80.jpg`,
+        medium: `${baseImageUrl}160.jpg`,
+        large: `${baseImageUrl}320.jpg`,
+        extraLarge: `${baseImageUrl}600.jpg`,
+        title: product.Name
+    }];
+
+    // Reset to first image
+    currentImageIndex = 0;
+    updateCarouselImage();
 }
 
 
@@ -196,7 +294,7 @@ export function renderProductDetails() {
         ${product.Images.PrimaryExtraLarge} 600w
     `;
     
-    imgElement.src = product.Images.PrimaryLarge; // Fallback for browsers that don't support srcset
+    imgElement.src = productImages[0].large;
     imgElement.alt = product.Name;
 
     document.querySelector("#productColorName").innerText = selectedColor.ColorName;
