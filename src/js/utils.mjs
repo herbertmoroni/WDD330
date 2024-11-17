@@ -106,7 +106,11 @@ export function renderPriceAndDiscount(priceElement, suggestedPrice, finalPrice)
 
   const priceSpan = document.createElement('span');
   priceSpan.className = 'product-card__final-price';
-  priceSpan.textContent = finalPrice;
+  // Format the price as currency
+  priceSpan.textContent = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(finalPrice);
 
   priceElement.innerHTML = '';
   if (discount > 0) {

@@ -4,8 +4,6 @@ import { renderPriceAndDiscount } from "./utils.mjs";
 export default async function productList(category) {
     const productList = document.querySelector(".product-list");
     const products = await getProductsByCategory(category);
-    console.log(category);
-    console.log(products);
 
     products.forEach(element => {
         //if (element.Id == "880RR" || element.Id == "985RF" || element.Id == "985PR" || element.Id == "344YJ") {
@@ -45,17 +43,6 @@ function productCard(product) {
 
     const priceElement = clone.querySelector(".card__price");
     renderPriceAndDiscount(priceElement, product.SuggestedRetailPrice, product.FinalPrice);
-
-    // Add debug info
-    // image.addEventListener('load', function() {
-    //     console.log('Loaded image:', {
-    //         currentSrc: this.currentSrc,  // Shows which image from srcset was chosen
-    //         naturalWidth: this.naturalWidth,
-    //         naturalHeight: this.naturalHeight,
-    //         offsetWidth: this.offsetWidth,
-    //         offsetHeight: this.offsetHeight
-    //     });
-    // });
 
     return clone;
 }
