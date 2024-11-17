@@ -2,6 +2,7 @@ import { findProductById, getProductsByCategory  } from "./externalServices.mjs"
 import { setLocalStorage, getLocalStorage, updateCartCount, animateCart, renderProductPrice } from "./utils.mjs";
 
 let product = {};
+let selectedColor = null;
 
 export async function productDetails(productID) {
     try {
@@ -12,6 +13,7 @@ export async function productDetails(productID) {
         }
 
         renderProductDetails();
+        setupColorSelection();
 
         document.getElementById("addToCart").addEventListener("click", addToCart);
 
@@ -22,6 +24,73 @@ export async function productDetails(productID) {
         renderErrorMessage();
     }
 }
+
+function setupColorSelection() {
+    const colorSwatches = document.querySelector('.color-swatches');
+    if (!product.Colors || product.Colors.length <= 1) {
+        document.querySelector('.product-colors').style.display = 'none';
+        return;
+    }
+
+    // Create color swatches
+    colorSwatches.innerHTML = product.Colors.map((color, index) => `
+        <div class="color-swatch ${index === 0 ? 'selected' : ''}"
+             data-color="${color.ColorName}"
+             style="background-image: url('${color.ColorChipImageSrc}')"
+             role="button"
+             tabindex="0"
+             title="${color.ColorName}">
+        </div>
+    `).join('');
+
+    // Set initial selected color
+    selectedColor = product.Colors[0];
+    updateSelectedColorDisplay(selectedColor);
+
+    // Add click handlers
+    colorSwatches.addEventListener('click', handleColorSelection);
+}
+
+function handleColorSelection(e) {
+    const swatch = e.target.closest('.color-swatch');
+    if (!swatch) return;
+
+    // Remove selection from all swatches
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+    
+    // Add selection to clicked swatch
+    swatch.classList.add('selected');
+
+    // Find and update selected color
+    const colorName = swatch.dataset.color;
+    selectedColor = product.Colors.find(c => c.ColorName === colorName);
+    
+    // Update display
+    updateSelectedColorDisplay(selectedColor);
+    updateProductImage(selectedColor);
+}
+
+function updateSelectedColorDisplay(color) {
+    const colorNameElement = document.querySelector("#productColorName");
+    if (colorNameElement) {
+        colorNameElement.textContent = color.ColorName;
+    }
+}
+
+function updateProductImage(color) {
+    const imgElement = document.querySelector("#productImage");
+    // Check if ColorPreviewImageSrc exists and contains different sizes
+    const baseImageUrl = color.ColorPreviewImageSrc.replace('160.jpg', '');
+    
+    imgElement.srcset = `
+        ${baseImageUrl}80.jpg 80w,
+        ${baseImageUrl}160.jpg 160w,
+        ${baseImageUrl}320.jpg 320w,
+        ${baseImageUrl}600.jpg 600w
+    `;
+    imgElement.src = baseImageUrl + '320.jpg';
+}
+
 
 async function addRecommendations(category) {
     try {
@@ -90,19 +159,24 @@ export function addToCart() {
         ? getLocalStorage("so-cart")
         : [];
 
-    // Check if product already exists in cart
-    const existingItemIndex = cart.findIndex(item => item.Id === product.Id);
+    // Create product variant with selected color
+    const productToAdd = {
+        ...product,
+        SelectedColor: selectedColor?.ColorName || product.Colors[0].ColorName
+    };
+
+    // Check if this exact variant exists in cart
+    const existingItemIndex = cart.findIndex(item => 
+        item.Id === product.Id && item.SelectedColor === productToAdd.SelectedColor
+    );
 
     if (existingItemIndex >= 0) {
-        // If item exists, increment its quantity
         cart[existingItemIndex].Quantity = (cart[existingItemIndex].Quantity || 1) + 1;
     } else {
-        // If item is new, add it with quantity of 1
-        product.Quantity = 1;
-        cart.push(product);
+        productToAdd.Quantity = 1;
+        cart.push(productToAdd);
     }
 
-    //cart.push(product);
     setLocalStorage("so-cart", cart);
     updateCartCount();
     animateCart();
@@ -113,6 +187,7 @@ export function renderProductDetails() {
     document.querySelector("#productNameWithoutBrand").innerText = product.NameWithoutBrand;
 
     // Set up responsive image with srcset
+    selectedColor = product.Colors[0];
     const imgElement = document.querySelector("#productImage");
     imgElement.srcset = `
         ${product.Images.PrimarySmall} 80w,
@@ -122,9 +197,9 @@ export function renderProductDetails() {
     `;
     
     imgElement.src = product.Images.PrimaryLarge; // Fallback for browsers that don't support srcset
-    document.querySelector("#productImage").alt = product.Name;
+    imgElement.alt = product.Name;
 
-    document.querySelector("#productColorName").innerText = product.Colors[0].ColorName;
+    document.querySelector("#productColorName").innerText = selectedColor.ColorName;
     document.querySelector("#productDescriptionHtmlSimple").innerHTML = product.DescriptionHtmlSimple;
     document.querySelector("button#addToCart").dataset.id = product.Id;
 
