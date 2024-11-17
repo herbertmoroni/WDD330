@@ -1,4 +1,4 @@
-import { getLocalStorage, setLocalStorage, updateCartCount } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, updateCartCount, updateCartItemQuantity } from "./utils.mjs";
 
 export function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
@@ -46,7 +46,9 @@ function cartItemTemplate(item) {
       <h2 class="card__name">${item.Name}</h2>
     </a>
     <p class="cart-card__color">${item.Colors[0].ColorName}</p>
-    <p class="cart-card__quantity">qty: ${item.Quantity || 1}</p>
+    <p class="cart-card__quantity">qty: 
+      <input type="number" class="quantity-input" data-id="${item.Id}" value="${item.Quantity || 1}" min="1">
+    </p>
     <p class="cart-card__price">$${item.FinalPrice}</p>
   </li>`;
 
@@ -62,8 +64,17 @@ function addRemoveButtonListeners() {
       renderCartContents();
     });
   });
-}
 
+  const quantityInputs = document.querySelectorAll(".quantity-input");
+  quantityInputs.forEach(input => {
+    input.addEventListener("change", function(event) {
+      const itemId = event.target.getAttribute("data-id");
+      const newQuantity = parseInt(event.target.value);
+      updateCartItemQuantity(itemId, newQuantity);
+      updateCartTotal(getLocalStorage("so-cart"));
+    });
+  });
+}
 
 function removeFromCart(itemId) {
   let cartItems = getLocalStorage("so-cart");

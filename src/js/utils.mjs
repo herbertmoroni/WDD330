@@ -190,4 +190,18 @@ export function searchBar(containerId) {
   container.appendChild(form);
 }
 
+export function updateCartItemQuantity(itemId, newQuantity) {
+  let cartItems = getLocalStorage("so-cart");
+  if (cartItems) {
+    cartItems = cartItems.map(item => {
+      if (item.Id === itemId) {
+        item.Quantity = newQuantity;
+      }
+      return item;
+    });
+    setLocalStorage("so-cart", cartItems);
+    updateCartCount();
+  }
+}
+
 // searchBar("search-container");
