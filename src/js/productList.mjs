@@ -2,16 +2,22 @@ import { getProductsByCategory } from "./externalServices.mjs";
 import { renderPriceAndDiscount } from "./utils.mjs";
 import { productDetails } from "./productDetails.mjs";
 
+
 export default async function productList(category) {
     const productList = document.querySelector(".product-list");
-    const products = await getProductsByCategory(category);
-
-    products.forEach(element => {
-        //if (element.Id == "880RR" || element.Id == "985RF" || element.Id == "985PR" || element.Id == "344YJ") {
-        const p = productCard(element);
-        productList.append(p);
-        //}
-    });
+     
+    // Create fragment for batch DOM update
+     const fragment = document.createDocumentFragment();
+    
+     // Get and process products
+     const products = await getProductsByCategory(category);
+     products.forEach(element => {
+         const p = productCard(element);
+         fragment.append(p);  // Append to fragment instead of DOM
+     });
+     
+     // Single DOM update
+     productList.append(fragment);
 
     setupModal();
 }
