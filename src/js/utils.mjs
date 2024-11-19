@@ -162,33 +162,72 @@ export function createRegistrationModal() {
   };
 }
 
-export function searchBar(containerId) {
-  const container = document.getElementById(containerId);
+export async function updateBreadcrumb() {
+  const breadcrumb = document.getElementById('breadcrumb');
+  
+  if (!breadcrumb) {
+    console.warn('Breadcrumb container not found');
+    return;
+  }
 
-  const form = document.createElement("form");
-  form.action = "/search";
-  form.method = "get";
-  form.className = "search-bar";
+  if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+    breadcrumb.style.display = 'none';
+    return;
+  }
 
-  form.id = "searchForm";
+  let breadcrumbContent = '<a href="/">Home</a>';
+  
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const category = urlParams.get('category');
+  const product = urlParams.get('product');
 
-  const input = document.createElement("input");
-  input.type = "text";
-  input.name = "query";
-  input.placeholder = "Search Products...";
-  input.setAttribute("aria-label", "Search");
+  if (category) {
+    const formattedCategory = category.split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
 
-  input.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      form.submit();
+    if (product) {
+      breadcrumbContent += ` > <a href="/product-list/index.html?category=${category}">${formattedCategory}</a>`;
+      breadcrumbContent += ` > Product Details`;
+    } else {
+      const productCount = document.querySelectorAll('.product-card').length || 0;
+      breadcrumbContent += ` > ${formattedCategory}`;
+      breadcrumbContent += ` (${productCount} items)`;
     }
-  });
+  }
 
-  form.appendChild(input);
-
-  container.appendChild(form);
+  breadcrumb.style.display = 'block';
+  breadcrumb.innerHTML = breadcrumbContent;
 }
+
+// export function searchBar(containerId) {
+//   const container = document.getElementById(containerId);
+
+//   const form = document.createElement("form");
+//   form.action = "/search";
+//   form.method = "get";
+//   form.className = "search-bar";
+
+//   form.id = "searchForm";
+
+//   const input = document.createElement("input");
+//   input.type = "text";
+//   input.name = "query";
+//   input.placeholder = "Search Products...";
+//   input.setAttribute("aria-label", "Search");
+
+//   input.addEventListener("keydown", function(event) {
+//     if (event.key === "Enter") {
+//       event.preventDefault();
+//       form.submit();
+//     }
+//   });
+
+//   form.appendChild(input);
+
+//   container.appendChild(form);
+// }
 
 export function updateCartItemQuantity(itemId, newQuantity) {
   let cartItems = getLocalStorage("so-cart");
